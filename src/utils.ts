@@ -1,4 +1,4 @@
-import { FILLED } from "./store/types";
+import { FILLED, BLOCKED, EMPTY } from "./store/types";
 
 const boardToChunks = (segment: string[]): number[] => {
     let length = 0;
@@ -92,6 +92,45 @@ export const chunkStartsAt = (start: number, length: number, line: string[]) : b
 
 }
 
+
+/**
+ * Return whether a list of hints can be satisfied in a given line between two indices
+ * 
+ * @param hints List of hints that must be placed
+ * @param start Starting index (inclusive)
+ * @param end Ending index (inclusive)
+ * @param line Partially filled game line
+ */
+export const hintsCanBeSatisfied = (hints: number[], start: number, end: number, line: string[]) : boolean => {
+    let rangeStart : number = start;
+    let rangeEnd : number = start;
+    let workingHints = [...hints];
+    while (rangeEnd < line.length && rangeEnd <= end) {
+        if (line[rangeStart] === BLOCKED) {
+            rangeEnd = rangeStart = rangeStart + 1;
+        } else if (line[rangeEnd] === BLOCKED) {
+            rangeStart = rangeEnd = rangeEnd + 1;
+        } else if (rangeEnd - rangeStart + 1 === workingHints[0]){
+            if ((rangeStart === 0 || line[rangeStart - 1] !== FILLED) && (rangeEnd == line.length || line[rangeEnd + 1] !== FILLED)) {
+                rangeStart = rangeEnd = rangeEnd + 2;
+                workingHints.shift();
+            } else if (rangeEnd === line.length) {
+                break;
+            } else if (line[rangeEnd + 1] == BLOCKED){
+                rangeStart = rangeEnd = rangeEnd + 1;
+            } else {
+                rangeStart += 1;
+                rangeEnd += 1;
+            }
+        } else {
+            rangeEnd += 1;
+        }
+    }
+
+    return workingHints.length === 0;
+}
+
+
 /**
  * 
  * Return a list of chunks of a given length within the line that start within the given range
@@ -113,7 +152,50 @@ export const getPotentialPlacements = (start: number, end: number, length: numbe
 }
 
 
+export const isValidPlacementForBlock = (start: number, hints: number[], hintIndex: number, line: string[]) : boolean => {
+    if (start +  hints[hintIndex] > line.length){
+        return false;
+    }
+    // Functions so they aren't evaluated unless needed
+    const canPlaceBefore = () => hintsCanBeSatisfied(hints.slice(0, hintIndex), 0, start - 1, line);
+    const canPlaceAfter = () => hintsCanBeSatisfied(hints.slice(hintIndex + 1, hints.length), start + 1, line.length - 1, line);
+    const firstHintSpecial = () => hintIndex !== 0 || (line.slice(0, start).filter((v) => (v === FILLED)).length === 0);
+    const lastHintSpecial = () => hintIndex !== hints.length - 1 || (line.slice(start + hints[hintIndex]).filter((v) => (v === FILLED)).length === 0);
+    return canPlaceBefore() && canPlaceAfter() && firstHintSpecial() && lastHintSpecial();
+}
+
+
 export const blockHasExclusivePlacement = (hints: number[], ranges: number[][], hintIndex: number, line: string[]) : boolean => {
     const placements = getPotentialPlacements(ranges[hintIndex][0], ranges[hintIndex][1], hints[hintIndex], line);
-    return placements.length === 1;
+    const validPlacements = placements.filter((p)=>(isValidPlacementForBlock(p, hints, hintIndex, line)))
+    if (validPlacements.length !== 1) {
+        return false;
+    }
+
+    // TODO must replace with whether can be anything else
+    const start = placements[0]
+    const alternatives = []
+    for (let i = 0; i < ranges.length; i++){
+        if (i !== hintIndex && hints[i] >= hints[hintIndex]){
+            let diff = hints[i] - hints[hintIndex];
+            if (ranges[i][0] <= start + diff && ranges[i][1] >= start - diff){
+                alternatives.push(i);
+            }
+        }
+    }
+
+    if (alternatives.length === 0) {
+        return true;
+    }
+
+    for (let i = 0; i < alternatives.length; i++){
+        let diff = hints[i] - hints[hintIndex];
+        for (let altStart = start - diff; altStart <= start; altStart++){
+            if (isValidPlacementForBlock(altStart, hints, alternatives[i], line)) {
+                return false;
+            }
+        }
+        
+    }
+    return true;
 }
