@@ -14,6 +14,9 @@ export const boardToChunks = (segment: string[]): number[] => {
     if (length > 0) {
         chunks.push(length);
     }
+    if (chunks.length === 0){
+        return [0]
+    }
     return chunks;
 }
 
