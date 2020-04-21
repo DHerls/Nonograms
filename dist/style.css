@@ -112,3 +112,29 @@
   -o-user-drag: none;
   user-drag: none;
 }
+
+#index {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#index p {
+    text-align: center;
+    width: 80%;
+}
+
+#game-key-nav {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+#game-key-nav label input {
+    margin-left: 5px;
+}
+
+#game-key-nav label {
+    break-after: always;
+}
