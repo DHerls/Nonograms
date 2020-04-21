@@ -71,11 +71,7 @@ export interface State {
         dragState: string,
         dragBoard: string[][]
     },
-    puzzle: Puzzle,
-    create: {
-        rows: number,
-        columns: number
-    }
+    puzzle: Puzzle
 }
 
 export interface Action{

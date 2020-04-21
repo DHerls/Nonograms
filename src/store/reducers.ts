@@ -60,11 +60,7 @@ const initialState : State = {
         dragState: EMPTY,
         dragBoard: createEmptyBoard(NUM_ROWS, NUM_COLS)
     },
-    puzzle: puzzle,
-    create: {
-        rows: 10,
-        columns: 10
-    }
+    puzzle: puzzle
 }
 
 // Compares two boards of equal size
