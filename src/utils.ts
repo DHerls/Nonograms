@@ -1,6 +1,6 @@
 import { FILLED, BLOCKED, EMPTY } from "./store/types";
 
-const boardToChunks = (segment: string[]): number[] => {
+export const boardToChunks = (segment: string[]): number[] => {
     let length = 0;
     const chunks = [];
     for (let i = 0; i < segment.length; i++) {

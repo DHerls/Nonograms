@@ -5,18 +5,20 @@ import ColumnHintsContainer from './ColumnHintsContainer';
 import RowHintsContainer from './RowHintsContainer';
 
 interface PuzzleBoardProps {
-    puzzle: Puzzle
+    puzzle: Puzzle,
+    isSolved: boolean
 }
 
 export class PuzzleBoard extends React.Component<PuzzleBoardProps, {}> {
     render() {
         return (
-          <div className="puzzle-board">
-            <div className="hint-area">
-                <ColumnHintsContainer />
-                <RowHintsContainer />
-                <GameBoardContainer />
-            </div>
+            <div className={`puzzle-board${this.props.isSolved ? ' solved' : ''}`}>
+              {this.props.isSolved ? <p>Solved!</p> : ''}
+              <div className="hint-area">
+                  <ColumnHintsContainer />
+                  <RowHintsContainer />
+                  <GameBoardContainer />
+              </div>
           </div>
         );
     }
