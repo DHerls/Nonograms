@@ -9,8 +9,8 @@ import { encodeBoardToKey } from "../utils";
 
 const mapStateToProps = (state: State) => {
     return {
-      rows: state.create.rows,
-      columns: state.create.columns,
+      rows: state.boardHistory[0].length,
+      columns: state.boardHistory[0][0].length,
       shareURL: encodeBoardToKey(state.boardHistory[0])
     };
 }

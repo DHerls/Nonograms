@@ -119,11 +119,48 @@ const continueDragReducer = (state: State, action: ContinueDragAction) : State =
     }
 }
 
+
+const changeRowNumber = (board: string[][], numRows: number): string[][] => {
+  const diff = numRows - board.length;
+  let newBoard = [];
+  let newRow = [];
+  if (diff > 0) {
+    newBoard = board.map((row) => [...row]);
+    for (let i = 0; i < diff; i++){
+      newRow = Array(board[0].length);
+      newRow.fill(EMPTY);
+      newBoard.push(newRow);
+    }
+  } else {
+    newBoard = board.filter((row, index) => index < numRows).map((row) => [...row]);
+  }
+  return newBoard;
+}
+
+
+const changeColNumber = (board: string[][], numCols: number): string[][] => {
+  const diff = numCols - board[0].length;
+  let newBoard = [];
+  let ext :string[] = [];
+  if (diff > 0) {
+    ext = Array(diff);
+    ext.fill(EMPTY)
+    newBoard = board.map(row => row.concat(ext));
+  } else {
+    // Diff is negative
+    newBoard = board.map(row => row.slice(0, row.length + diff));
+  }
+  return newBoard
+}
+
+
+
 export const rootReducer = (state: State = initialState, action: ActionSet) : State => {
+    let newBoard = []
     switch (action.type) {
       case SET_SQUARE_STATE:
         const setAction = action as SetSquareStateAction;
-        const newBoard = state.boardHistory[0].map((row, index) => {
+        newBoard = state.boardHistory[0].map((row, index) => {
           if (index === setAction.row) {
             const newRow = [...row];
             newRow[setAction.col] = setAction.state;
@@ -176,11 +213,7 @@ export const rootReducer = (state: State = initialState, action: ActionSet) : St
         }
         return {
           ...state,
-          boardHistory: [createEmptyBoard(scrAction.rows, state.create.columns)],
-          create: {
-            rows: scrAction.rows,
-            columns: state.create.columns,
-          },
+          boardHistory: [changeRowNumber(state.boardHistory[0], scrAction.rows), ...state.boardHistory],
         };
       case SET_CREATE_COLUMNS:
         const sccAction = action as SetCreateColumns;
@@ -190,12 +223,8 @@ export const rootReducer = (state: State = initialState, action: ActionSet) : St
         return {
           ...state,
           boardHistory: [
-            createEmptyBoard(state.create.rows, sccAction.columns),
+            changeColNumber(state.boardHistory[0], sccAction.columns), ...state.boardHistory
           ],
-          create: {
-            rows: state.create.rows,
-            columns: sccAction.columns,
-          },
         };
     
       case SET_PUZZLE:
