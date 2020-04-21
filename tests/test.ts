@@ -85,4 +85,38 @@ describe("blockHasExclusivePlacement", () => {
         expect(blockHasExclusivePlacement([2, 2, 2], findSolutionRanges([2, 2, 2], 10), 1, [FILLED, FILLED, EMPTY, FILLED, FILLED, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY])).toBeTrue();
         expect(blockHasExclusivePlacement([2, 2, 2], findSolutionRanges([2, 2, 2], 15), 1, [FILLED, FILLED, EMPTY, FILLED, FILLED, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY])).toBeTrue();
     })
+    
+    it("Ant Puzzle", () => {
+        const line = [FILLED, EMPTY, FILLED, FILLED, FILLED, EMPTY, EMPTY, EMPTY, FILLED, EMPTY, FILLED, EMPTY, FILLED, EMPTY, EMPTY, FILLED, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]
+        const hints = [1, 3, 1, 1, 1, 3, 2, 3]
+        expect(blockHasExclusivePlacement([1, 3, 1, 1, 1, 3, 2, 3], findSolutionRanges([1, 3, 1, 1, 1, 3, 2, 3], 25), 0, line)).toBeTrue()
+        expect(blockHasExclusivePlacement([1, 3, 1, 1, 1, 3, 2, 3], findSolutionRanges([1, 3, 1, 1, 1, 3, 2, 3], 25), 1, line)).toBeTrue()
+        expect(blockHasExclusivePlacement([1, 3, 1, 1, 1, 3, 2, 3], findSolutionRanges([1, 3, 1, 1, 1, 3, 2, 3], 25), 2, line)).toBeTrue()
+        expect(blockHasExclusivePlacement([1, 3, 1, 1, 1, 3, 2, 3], findSolutionRanges([1, 3, 1, 1, 1, 3, 2, 3], 25), 3, line)).toBeTrue()
+        expect(blockHasExclusivePlacement([1, 3, 1, 1, 1, 3, 2, 3], findSolutionRanges([1, 3, 1, 1, 1, 3, 2, 3], 25), 4, line)).toBeTrue()
+        expect(blockHasExclusivePlacement([1, 3, 1, 1, 1, 3, 2, 3], findSolutionRanges([1, 3, 1, 1, 1, 3, 2, 3], 25), 5, line)).toBeFalse()
+    })
+    it("Ant Puzzle 2", () => {
+        const line = [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, FILLED, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BLOCKED, FILLED, FILLED, EMPTY, FILLED, FILLED, EMPTY, EMPTY, EMPTY, EMPTY]
+        const hints = [1, 3, 1, 1, 1, 3, 2, 3]
+        const ranges = findSolutionRanges(hints, 25);
+        // expect(hintsCanBeSatisfied([1,3,1,1,1,3], 0, 18, line, true)).toBeFalse();
+        expect(blockHasExclusivePlacement(hints, ranges, 0, line)).toBeFalse()
+        expect(blockHasExclusivePlacement(hints, ranges, 1, line)).toBeFalse()
+        expect(blockHasExclusivePlacement(hints, ranges, 2, line)).toBeTrue()
+        expect(blockHasExclusivePlacement(hints, ranges, 3, line)).toBeFalse()
+        expect(blockHasExclusivePlacement(hints, ranges, 4, line)).toBeFalse()
+        expect(blockHasExclusivePlacement(hints, ranges, 5, line)).toBeFalse()
+        expect(blockHasExclusivePlacement(hints, ranges, 6, line)).toBeTrue()
+        expect(blockHasExclusivePlacement(hints, ranges, 7, line)).toBeFalse()
+    })
+    it("Ant Puzzle 3", () => {
+        const line = [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BLOCKED, FILLED, BLOCKED, FILLED, BLOCKED, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY];
+        const hints = [2, 1, 1, 2];
+        const ranges = findSolutionRanges(hints, 15);
+        expect(blockHasExclusivePlacement(hints, ranges, 0, line)).toBeFalse()
+        expect(blockHasExclusivePlacement(hints, ranges, 1, line)).toBeTrue()
+        expect(blockHasExclusivePlacement(hints, ranges, 2, line)).toBeTrue()
+        expect(blockHasExclusivePlacement(hints, ranges, 3, line)).toBeFalse()
+    });
 })

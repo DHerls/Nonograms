@@ -104,22 +104,37 @@ export const chunkStartsAt = (start: number, length: number, line: string[]) : b
  * @param end Ending index (inclusive)
  * @param line Partially filled game line
  */
-export const hintsCanBeSatisfied = (hints: number[], start: number, end: number, line: string[]) : boolean => {
-    let rangeStart : number = start;
-    let rangeEnd : number = start;
-    let workingHints = [...hints];
-    while (rangeEnd < line.length && rangeEnd <= end) {
-        if (line[rangeStart] === BLOCKED) {
+export const hintsCanBeSatisfied = (hints: number[], start: number, end: number, line: string[], reverse: boolean = false) : boolean => {
+    // console.log(hints, start, end, reverse);
+    let rangeStart : number = reverse ? line.length - end : start;
+    let rangeEnd : number = reverse ? line.length - end : start;
+    let workingHints = reverse ? [...hints].reverse() : [...hints];
+    const stop = reverse ? line.length - start: end;
+    const workingLine = reverse ? [...line].reverse() : [...line]
+    // console.log(reverse, workingLine);
+    let numFilled = 0;
+    let maxFilled = 0;
+
+    while (rangeEnd < workingLine.length && rangeEnd <= stop) {
+        // console.log(`rstart: ${rangeStart} rend: ${rangeEnd} nfilled: ${numFilled} mfilled: ${maxFilled} whints: ${workingHints}`)
+        if (workingLine[rangeEnd] === FILLED){
+            numFilled += 1;
+        }
+        if (workingLine[rangeStart] === BLOCKED) {
             rangeEnd = rangeStart = rangeStart + 1;
-        } else if (line[rangeEnd] === BLOCKED) {
+        } else if (workingLine[rangeEnd] === BLOCKED) {
             rangeStart = rangeEnd = rangeEnd + 1;
         } else if (rangeEnd - rangeStart + 1 === workingHints[0]){
-            if ((rangeStart === 0 || line[rangeStart - 1] !== FILLED) && (rangeEnd == line.length || line[rangeEnd + 1] !== FILLED)) {
+            if ((rangeStart === 0 || workingLine[rangeStart - 1] !== FILLED) && (rangeEnd == workingLine.length || workingLine[rangeEnd + 1] !== FILLED)) {
+                // console.log(line.filter((value, index) => index >= rangeEnd && index <= rangeEnd))
+                if (numFilled + workingLine.filter((value, index) => index >= rangeStart && index <= rangeEnd && value === EMPTY).length > maxFilled + workingHints[0]){
+                    return false;
+                }
                 rangeStart = rangeEnd = rangeEnd + 2;
-                workingHints.shift();
-            } else if (rangeEnd === line.length) {
+                maxFilled += workingHints.shift();
+            } else if (rangeEnd === workingLine.length) {
                 break;
-            } else if (line[rangeEnd + 1] == BLOCKED){
+            } else if (workingLine[rangeEnd + 1] == BLOCKED){
                 rangeStart = rangeEnd = rangeEnd + 1;
             } else {
                 rangeStart += 1;
@@ -130,7 +145,7 @@ export const hintsCanBeSatisfied = (hints: number[], start: number, end: number,
         }
     }
 
-    return workingHints.length === 0;
+    return numFilled <= hints.reduce((a, b) => a + b, 0) && workingHints.length === 0;
 }
 
 
@@ -159,9 +174,21 @@ export const isValidPlacementForBlock = (start: number, hints: number[], hintInd
     if (start +  hints[hintIndex] > line.length){
         return false;
     }
+
+    for (let i = start; i < start + hints[hintIndex]; i++) {
+        if (line[i] === BLOCKED){
+            return false;
+        }
+    }
+
+    if (line[start + hints[hintIndex]] === FILLED) {
+        return false;
+    }
+
+
     // Functions so they aren't evaluated unless needed
-    const canPlaceBefore = () => hintsCanBeSatisfied(hints.slice(0, hintIndex), 0, start - 1, line);
-    const canPlaceAfter = () => hintsCanBeSatisfied(hints.slice(hintIndex + 1, hints.length), start + 1, line.length - 1, line);
+    const canPlaceBefore = () => hintsCanBeSatisfied(hints.slice(0, hintIndex), 0, start - 1, line, true);
+    const canPlaceAfter = () => hintsCanBeSatisfied(hints.slice(hintIndex + 1, hints.length), start + hints[hintIndex] + 1, line.length - 1, line);
     const firstHintSpecial = () => hintIndex !== 0 || (line.slice(0, start).filter((v) => (v === FILLED)).length === 0);
     const lastHintSpecial = () => hintIndex !== hints.length - 1 || (line.slice(start + hints[hintIndex]).filter((v) => (v === FILLED)).length === 0);
     return canPlaceBefore() && canPlaceAfter() && firstHintSpecial() && lastHintSpecial();
@@ -170,13 +197,15 @@ export const isValidPlacementForBlock = (start: number, hints: number[], hintInd
 
 export const blockHasExclusivePlacement = (hints: number[], ranges: number[][], hintIndex: number, line: string[]) : boolean => {
     const placements = getPotentialPlacements(ranges[hintIndex][0], ranges[hintIndex][1], hints[hintIndex], line);
+    // console.log(placements)
     const validPlacements = placements.filter((p)=>(isValidPlacementForBlock(p, hints, hintIndex, line)))
+    // console.log(validPlacements);
     if (validPlacements.length !== 1) {
         return false;
     }
 
     // TODO must replace with whether can be anything else
-    const start = placements[0]
+    const start = validPlacements[0]
     const alternatives = []
     for (let i = 0; i < ranges.length; i++){
         if (i !== hintIndex && hints[i] >= hints[hintIndex]){
@@ -186,15 +215,18 @@ export const blockHasExclusivePlacement = (hints: number[], ranges: number[][], 
             }
         }
     }
+    // console.log(hints, hintIndex, start)
+    // console.log(alternatives);
 
     if (alternatives.length === 0) {
         return true;
     }
 
     for (let i = 0; i < alternatives.length; i++){
-        let diff = hints[i] - hints[hintIndex];
+        let diff = hints[alternatives[i]] - hints[hintIndex];
         for (let altStart = start - diff; altStart <= start; altStart++){
-            if (isValidPlacementForBlock(altStart, hints, alternatives[i], line)) {
+            if ((altStart === 0 || line[altStart - 1] !== FILLED) && line[altStart] !== BLOCKED && isValidPlacementForBlock(altStart, hints, alternatives[i], line)) {
+                // console.log(alternatives[i], altStart);
                 return false;
             }
         }
@@ -218,7 +250,7 @@ const ENCODE_ORDER = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B'
 
 export const encodeBoardToKey = (board: string[][]): string => {
     const rowString = board.map((row) => boardToChunks(row).map((len) => ENCODE_ORDER[len]).join('')).join(':');
-    console.log(transpose(board));
+    // console.log(transpose(board));
     const colString = transpose(board)
       .map((col) =>
         boardToChunks(col)
