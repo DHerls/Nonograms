@@ -1,4 +1,4 @@
-import {EMPTY, State, Action, SET_SQUARE_STATE, ActionSet, SetSquareStateAction, START_DRAG, StartDragAction, CONTINUE_DRAG, ContinueDragAction, STOP_DRAG, UNDO, Puzzle, CLEAR, SET_CREATE_ROWS, SetCreateRows, SET_CREATE_COLUMNS, SetCreateColumns} from './types'
+import {EMPTY, State, Action, SET_SQUARE_STATE, ActionSet, SetSquareStateAction, START_DRAG, StartDragAction, CONTINUE_DRAG, ContinueDragAction, STOP_DRAG, UNDO, Puzzle, CLEAR, SET_CREATE_ROWS, SetCreateRows, SET_CREATE_COLUMNS, SetCreateColumns, SET_PUZZLE, SetPuzzle} from './types'
 import { findSolutionRanges } from '../utils';
 
 
@@ -197,6 +197,19 @@ export const rootReducer = (state: State = initialState, action: ActionSet) : St
             columns: sccAction.columns,
           },
         };
+    
+      case SET_PUZZLE:
+          const spAction = action as SetPuzzle;
+          return {
+            ...state,
+            puzzle: spAction.puzzle,
+            boardHistory: [
+              createEmptyBoard(
+                spAction.puzzle.rows.length,
+                spAction.puzzle.columns.length
+              ),
+            ],
+          };
       default:
         return state;
     }

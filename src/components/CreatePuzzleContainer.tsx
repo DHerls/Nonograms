@@ -4,14 +4,14 @@ import { connect } from "react-redux";
 import { CreatePuzzle } from "./CreatePuzzle";
 import * as React from 'react';
 import { setCreateRows, setCreateColumns } from "../store/actions";
-import { encodeBoard } from "../utils";
+import { encodeBoardToKey } from "../utils";
 
 
 const mapStateToProps = (state: State) => {
     return {
       rows: state.create.rows,
       columns: state.create.columns,
-      shareURL: encodeBoard(state.boardHistory[0])
+      shareURL: encodeBoardToKey(state.boardHistory[0])
     };
 }
 

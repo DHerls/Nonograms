@@ -48,6 +48,11 @@ export interface SetCreateColumns extends Action {
   columns: number;
 }
 
+export const SET_PUZZLE = 'SET_PUZZLE';
+export interface SetPuzzle extends Action {
+    puzzle: Puzzle;
+}
+
 
 export interface Puzzle {
     rows: number[][],

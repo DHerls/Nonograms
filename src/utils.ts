@@ -1,4 +1,4 @@
-import { FILLED, BLOCKED, EMPTY } from "./store/types";
+import { FILLED, BLOCKED, EMPTY, Puzzle } from "./store/types";
 
 export const boardToChunks = (segment: string[]): number[] => {
     let length = 0;
@@ -203,7 +203,7 @@ export const blockHasExclusivePlacement = (hints: number[], ranges: number[][], 
 
 const transpose = (array: any[][]): any[][] => {
     const trans = [];
-    for (let i = 0; i < array.length; i++){
+    for (let i = 0; i < array[0].length; i++){
         trans.push(array.map((row) => row[i]));
     }
     return trans;
@@ -213,14 +213,58 @@ const transpose = (array: any[][]): any[][] => {
 const ENCODE_ORDER = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 
-export const encodeBoard = (board: string[][]): string => {
-    const rowString = board.map((row) => boardToChunks(row).map((len) => ENCODE_ORDER[len]).join('')).join(';');
+export const encodeBoardToKey = (board: string[][]): string => {
+    const rowString = board.map((row) => boardToChunks(row).map((len) => ENCODE_ORDER[len]).join('')).join(':');
+    console.log(transpose(board));
     const colString = transpose(board)
       .map((col) =>
         boardToChunks(col)
           .map((len) => ENCODE_ORDER[len])
           .join("")
       )
-      .join(";");
-    return `${rowString}:${colString}`;
+      .join(":");
+    return `${rowString};${colString}`;
+}
+
+
+export const decodeKeyToPuzzle = (gameKey: string) : Puzzle => {
+    // Returned if key is invalid
+    const invalidPuzzle : Puzzle = {
+        rows: [],
+        columns: [],
+        rowRanges: [],
+        colRanges: []
+    }
+    const halves: string[] = gameKey.split(';');
+    if (halves.length !== 2){
+        return invalidPuzzle;
+    }
+    const rowKeys = halves[0].split(':');
+    const colKeys = halves[1].split(':');
+    if (rowKeys.length > 30 || colKeys.length > 30){
+        return invalidPuzzle;
+    }
+
+    const rows = rowKeys.map((key) => key.split('').map((char) => ENCODE_ORDER.indexOf(char.toUpperCase())));
+    const cols = colKeys.map((key) => key.split('').map((char) => ENCODE_ORDER.indexOf(char.toUpperCase())));
+
+    if (rows.filter((row) => row.indexOf(-1) > -1).length > 0 || cols.filter((col) => col.indexOf(-1) > -1).length > 0) {
+        return invalidPuzzle;
+    }
+
+    if (rows.filter((row) => row.reduce((a, b) => a + b, 0) + row.length - 1 > cols.length).length > 0 ) {
+        return invalidPuzzle;
+    }
+
+    if (cols.filter((col) => col.reduce((a, b) => a + b, 0) + col.length - 1 > rows.length).length > 0 ) {
+        return invalidPuzzle;
+    }
+
+    return {
+        rows: rows,
+        columns: cols,
+        rowRanges: rows.map((hints) => findSolutionRanges(hints, cols.length)),
+        colRanges: cols.map((hints) => findSolutionRanges(hints, rows.length)),
+    };
+
 }
