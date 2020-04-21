@@ -1,8 +1,8 @@
 .game-square {
-    width: 50px;
-    height: 50px;
     display: inline-block;
     border: 1px solid lightgrey;
+    border-top: 1px transparent;
+    border-left: 1px transparent;
 }
 
 .game-square.filled {
@@ -12,8 +12,8 @@
 .game-square.blocked:before {
     content: "";
     position: absolute;
-    border-top: 2px solid grey;
-    width: 71px;
+    border-top: 1px solid grey;
+    width: 42px;
     transform: rotate(45deg);
     transform-origin: 0 0;
 }
@@ -21,20 +21,23 @@
 .game-square.blocked:after {
     content: "";
     position: absolute;
-    border-top: 2px solid grey;
-    width: 71px;
+    border-top: 1px solid grey;
+    width: 43px;
     transform: rotate(-45deg);
     transform-origin: 0 0;
-    margin-top: 50px
+    margin-top: 30px
 }
 
 .game-row {
-    display: block;
+    display: flex;
     line-height: 0;
+    flex-wrap: nowrap;
 }
 
 .game-rows {
     background: white;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
     display: inline-block;
 }
 
@@ -52,17 +55,25 @@
 }
 
 .hint-square {
-    width: 50px;
-    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.6em;
-    border: 1px solid lightgrey;
+    font-size: 1.2em;
+    border: 1px solid black;
+    border-top: 1px transparent;
+    border-left: 1px transparent;
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
+}
+
+.hint-row:nth-child(1) .hint-square,  .hint-column .hint-square:nth-child(1){
+    border-top: 1px solid black;
+}
+
+.hint-row .hint-square:nth-child(1), .hint-column:nth-child(1) .hint-square {
+    border-left: 1px solid black;
 }
 
 .puzzle-board {
@@ -95,14 +106,20 @@
 
 .hint-square, .game-square {
     box-sizing: content-box;
+    width: 30px;
+    height: 30px;
 }
 
-.hint-square.solved:before {
+/* .hint-square.solved:before {
     content: "";
     position: absolute;
     border-top: 2px solid black;
     width: 71px;
     transform: rotate(45deg);
+} */
+
+.hint-square.solved {
+    background-color: lightgrey;
 }
 
 * {
