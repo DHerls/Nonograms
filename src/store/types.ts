@@ -38,6 +38,16 @@ export interface ClearAction extends Action {
 
 }
 
+export const SET_CREATE_ROWS = 'SET_CREATE_ROWS';
+export interface SetCreateRows extends Action {
+    rows: number
+}
+
+export const SET_CREATE_COLUMNS = "SET_CREATE_COLUMNS";
+export interface SetCreateColumns extends Action {
+  columns: number;
+}
+
 
 export interface Puzzle {
     rows: number[][],
@@ -56,7 +66,11 @@ export interface State {
         dragState: string,
         dragBoard: string[][]
     },
-    puzzle: Puzzle
+    puzzle: Puzzle,
+    create: {
+        rows: number,
+        columns: number
+    }
 }
 
 export interface Action{

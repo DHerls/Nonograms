@@ -1,4 +1,4 @@
-import {EMPTY, State, Action, SET_SQUARE_STATE, ActionSet, SetSquareStateAction, START_DRAG, StartDragAction, CONTINUE_DRAG, ContinueDragAction, STOP_DRAG, UNDO, Puzzle, CLEAR} from './types'
+import {EMPTY, State, Action, SET_SQUARE_STATE, ActionSet, SetSquareStateAction, START_DRAG, StartDragAction, CONTINUE_DRAG, ContinueDragAction, STOP_DRAG, UNDO, Puzzle, CLEAR, SET_CREATE_ROWS, SetCreateRows, SET_CREATE_COLUMNS, SetCreateColumns} from './types'
 import { findSolutionRanges } from '../utils';
 
 
@@ -40,10 +40,10 @@ const puzzle : Puzzle = {
 
 
 const createEmptyBoard = (rows: number, columns: number) : string[][] =>{
-    let board: string[][] = [];
+    const board: string[][] = [];
     let row: string[] = [];
-    for (let i = 0; i < NUM_ROWS; i++) {
-        row = Array(NUM_COLS);
+    for (let i = 0; i < rows; i++) {
+        row = Array(columns);
         row.fill(EMPTY);
         board.push(row);
     }
@@ -60,7 +60,11 @@ const initialState : State = {
         dragState: EMPTY,
         dragBoard: createEmptyBoard(NUM_ROWS, NUM_COLS)
     },
-    puzzle: puzzle
+    puzzle: puzzle,
+    create: {
+        rows: 10,
+        columns: 10
+    }
 }
 
 // Compares two boards of equal size
@@ -116,56 +120,84 @@ const continueDragReducer = (state: State, action: ContinueDragAction) : State =
 }
 
 export const rootReducer = (state: State = initialState, action: ActionSet) : State => {
-    switch(action.type){
-        case SET_SQUARE_STATE:
-            const setAction = action as SetSquareStateAction;
-            const newBoard = state.boardHistory[0].map((row, index) => {
-                if (index === setAction.row){
-                    const newRow = [...row];
-                    newRow[setAction.col] = setAction.state;
-                    return newRow;
-                }
-                return [...row];
-            })
-            return {
-                ...state,
-                boardHistory: [newBoard, ...state.boardHistory]
-            }
-        case START_DRAG:
-            const startAction = action as StartDragAction;
-            return {
-                ...state,
-                mouse: {
-                    isDragging: true,
-                    dragStartRow: startAction.row,
-                    dragStartCol: startAction.col,
-                    dragState: startAction.state,
-                    dragBoard: state.boardHistory[0].map((row) => ([...row]))
-                }
-            }
-        case CONTINUE_DRAG:
-            return continueDragReducer(state, action as ContinueDragAction);
-        case STOP_DRAG:
-            return {
-                ...state,
-                mouse: {
-                    ...state.mouse,
-                    isDragging: false
-                }
-            }
-        case UNDO:
-            const undoArray = [...state.boardHistory]
-            undoArray.shift();
-            return {
-                ...state,
-                boardHistory: undoArray
-            }
-        case CLEAR:
-            return {
-                ...state,
-                boardHistory: [createEmptyBoard(NUM_ROWS, NUM_COLS)]
-            }
-        default:
-            return state
+    switch (action.type) {
+      case SET_SQUARE_STATE:
+        const setAction = action as SetSquareStateAction;
+        const newBoard = state.boardHistory[0].map((row, index) => {
+          if (index === setAction.row) {
+            const newRow = [...row];
+            newRow[setAction.col] = setAction.state;
+            return newRow;
+          }
+          return [...row];
+        });
+        return {
+          ...state,
+          boardHistory: [newBoard, ...state.boardHistory],
+        };
+      case START_DRAG:
+        const startAction = action as StartDragAction;
+        return {
+          ...state,
+          mouse: {
+            isDragging: true,
+            dragStartRow: startAction.row,
+            dragStartCol: startAction.col,
+            dragState: startAction.state,
+            dragBoard: state.boardHistory[0].map((row) => [...row]),
+          },
+        };
+      case CONTINUE_DRAG:
+        return continueDragReducer(state, action as ContinueDragAction);
+      case STOP_DRAG:
+        return {
+          ...state,
+          mouse: {
+            ...state.mouse,
+            isDragging: false,
+          },
+        };
+      case UNDO:
+        const undoArray = [...state.boardHistory];
+        undoArray.shift();
+        return {
+          ...state,
+          boardHistory: undoArray,
+        };
+      case CLEAR:
+        return {
+          ...state,
+          boardHistory: [createEmptyBoard(state.boardHistory[0].length, state.boardHistory[0][0].length)],
+        };
+      case SET_CREATE_ROWS:
+        const scrAction = action as SetCreateRows;
+        if (scrAction.rows > 30 || scrAction.rows < 1){
+            return state;
+        }
+        return {
+          ...state,
+          boardHistory: [createEmptyBoard(scrAction.rows, state.create.columns)],
+          create: {
+            rows: scrAction.rows,
+            columns: state.create.columns,
+          },
+        };
+      case SET_CREATE_COLUMNS:
+        const sccAction = action as SetCreateColumns;
+        if (sccAction.columns > 30 || sccAction.columns < 1) {
+          return state;
+        }
+        return {
+          ...state,
+          boardHistory: [
+            createEmptyBoard(state.create.rows, sccAction.columns),
+          ],
+          create: {
+            rows: state.create.rows,
+            columns: sccAction.columns,
+          },
+        };
+      default:
+        return state;
     }
 }

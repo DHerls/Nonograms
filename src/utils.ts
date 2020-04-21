@@ -199,3 +199,28 @@ export const blockHasExclusivePlacement = (hints: number[], ranges: number[][], 
     }
     return true;
 }
+
+
+const transpose = (array: any[][]): any[][] => {
+    const trans = [];
+    for (let i = 0; i < array.length; i++){
+        trans.push(array.map((row) => row[i]));
+    }
+    return trans;
+}
+
+
+const ENCODE_ORDER = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+
+export const encodeBoard = (board: string[][]): string => {
+    const rowString = board.map((row) => boardToChunks(row).map((len) => ENCODE_ORDER[len]).join('')).join(';');
+    const colString = transpose(board)
+      .map((col) =>
+        boardToChunks(col)
+          .map((len) => ENCODE_ORDER[len])
+          .join("")
+      )
+      .join(";");
+    return `${rowString}:${colString}`;
+}

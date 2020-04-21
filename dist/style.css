@@ -85,11 +85,11 @@
     display: grid;
 }
 
-.game-row:nth-child(5) .game-square, .hint-row:nth-child(5) .hint-square{
+.game-row:nth-child(5n) .game-square, .hint-row:nth-child(5n) .hint-square{
     border-bottom-width: 3px;
 }
 
-.game-square:nth-child(5), .hint-column:nth-child(5) .hint-square {
+.game-square:nth-child(5n), .hint-column:nth-child(5n) .hint-square {
     border-right-width: 3px;
 }
 
