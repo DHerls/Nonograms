@@ -1,45 +1,97 @@
+%square-shared {
+    box-sizing: content-box;
+    width: 30px;
+    height: 30px;
+}
+
+%thick-bottom-border {
+    border-bottom-width: 3px;
+}
+
+%thick-right-border {
+    border-right-width: 3px;
+}
+
+%outisde-top-border {
+    border-top: 1px solid black;
+}
+
+%outside-left-border {
+    border-left: 1px solid black;
+}
+
+%outisde-bottom-border {
+    border-bottom: 1px solid black;
+}
+
+%outside-right-border {
+    border-right: 1px solid black;
+}
+
 body {
     background-color: #bae1f0;
 }
 
 .game-square {
+    @extend %square-shared;
     display: inline-block;
     border: 1px solid lightgrey;
-    border-top: 1px transparent;
-    border-left: 1px transparent;
-}
+    border: {
+        top: 1px transparent;
+        left: 1px transparent;
+    }
 
-.game-square.filled {
-    background-color: black;
-}
+    &.filled {
+        background-color: black;
+    }
 
-.game-square.blocked:before {
-    content: "";
-    position: absolute;
-    border-top: 1px solid grey;
-    width: 42px;
-    transform: rotate(45deg);
-    transform-origin: 0 0;
-}
-
-.game-square.blocked:after {
-    content: "";
-    position: absolute;
-    border-top: 1px solid grey;
-    width: 43px;
-    transform: rotate(-45deg);
-    transform-origin: 0 0;
-    margin-top: 30px
+    &.blocked {
+        &:before {
+            content: "";
+            position: absolute;
+            border-top: 1px solid grey;
+            width: 42px;
+            transform: rotate(45deg);
+            transform-origin: 0 0;
+        }
+        &:after {
+            content: "";
+            position: absolute;
+            border-top: 1px solid grey;
+            width: 43px;
+            transform: rotate(-45deg);
+            transform-origin: 0 0;
+            margin-top: 30px;
+        }
+    }
+    &:nth-child(5n) {
+        @extend %thick-right-border;
+    }
+    &:nth-last-child(1) {
+        @extend %outside-right-border;
+    }
 }
 
 .game-row {
     display: flex;
     line-height: 0;
     flex-wrap: nowrap;
+    
+    &:nth-child(5n) {
+        .game-square {
+            @extend %thick-bottom-border;
+        }
+    }
+
+    &:nth-last-child(1) {
+        .game-square {
+            @extend %outisde-bottom-border;
+        }   
+    }
 }
 
 .game-rows {
-    background: white;
+    background-color: white;
     border-top: 1px solid black;
     border-left: 1px solid black;
     display: inline-block;
@@ -53,12 +105,8 @@ body {
     display: inline-block;
 }
 
-.hint-row {
-    display: flex;
-    justify-content: flex-end;
-}
-
 .hint-square {
+    @extend %square-shared;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,18 +115,70 @@ body {
     border-top: 1px transparent;
     background-color: lightgrey;
     border-left: 1px transparent;
-    -webkit-user-select: none; /* Safari */        
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */
+    -webkit-user-select: none;      
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &.solved {
+        background-color: #848484;
+        color: #fff;
+    }
 }
 
-.hint-row:nth-child(1) .hint-square,  .hint-column .hint-square:nth-child(1){
-    border-top: 1px solid black;
+
+
+.hint-row {
+    display: flex;
+    justify-content: flex-end;
+
+    &:nth-child(1) {
+        .hint-square {
+            @extend %outisde-top-border;
+        }
+    }
+    &:nth-child(5n) {
+        .hint-square {
+            @extend %thick-bottom-border;
+        }
+    }
+    &:nth-last-child(1) {
+        .hint-square {
+            @extend %outisde-bottom-border;
+        }
+    }
+    .hint-square {
+        &:nth-child(1) {
+            @extend %outside-left-border;
+        }
+    }
 }
 
-.hint-row .hint-square:nth-child(1), .hint-column:nth-child(1) .hint-square {
-    border-left: 1px solid black;
+.hint-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    .hint-square {
+        &:nth-child(1) {
+            @extend %outisde-top-border;
+        }
+    }
+    &:nth-child(1) {
+        .hint-square {
+            @extend %outside-left-border;
+        }
+    }
+    &:nth-child(5n) {
+        .hint-square {
+            @extend %thick-right-border;
+        }
+    }
+    &:nth-last-child(1) {
+        .hint-square {
+            @extend %outside-right-border
+        }
+    }
 }
 
 .puzzle-board {
@@ -90,49 +190,8 @@ body {
     grid-column-start: 2;
 }
 
-.hint-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-
 .hint-area {
     display: grid;
-}
-
-.game-row:nth-child(5n) .game-square, .hint-row:nth-child(5n) .hint-square{
-    border-bottom-width: 3px;
-}
-
-.game-square:nth-child(5n), .hint-column:nth-child(5n) .hint-square {
-    border-right-width: 3px;
-}
-
-.game-row:nth-last-child(1) .game-square, .hint-row:nth-last-child(1) .hint-square{
-    border-bottom: 1px solid black;
-}
-
-.game-square:nth-last-child(1), .hint-column:nth-last-child(1) .hint-square {
-    border-right: 1px solid black;
-}
-
-.hint-square, .game-square {
-    box-sizing: content-box;
-    width: 30px;
-    height: 30px;
-}
-
-/* .hint-square.solved:before {
-    content: "";
-    position: absolute;
-    border-top: 4px solid #000000e0;
-    width: 42px;
-    transform: rotate(45deg);
-} */
-
-.hint-square.solved {
-    background-color: darkgrey;
-    color: #fff;
 }
 
 #index {
@@ -140,23 +199,21 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-}
-
-#index p {
-    text-align: center;
-    width: 80%;
+    p {
+        text-align: center;
+        width: 80%;
+    }
 }
 
 #game-key-nav {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-}
 
-#game-key-nav label input {
-    margin-left: 5px;
-}
-
-#game-key-nav label {
-    break-after: always;
+    label {
+        break-after: always;
+        input {
+            margin-left: 5px;
+        }
+    }
 }
