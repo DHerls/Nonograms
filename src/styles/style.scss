@@ -1,3 +1,15 @@
+/// Mixin to prefix a property
+/// @param {String} $property - Property name
+/// @param {*} $value - Property value
+/// @param {List} $prefixes (()) - List of prefixes to print
+@mixin prefix($property, $value, $prefixes: ()) {
+  @each $prefix in $prefixes {
+    #{'-' + $prefix + '-' + $property}: $value;
+  }
+  // Output standard non-prefixed declaration
+  #{$property}: $value;
+}
+
 %square-shared {
     box-sizing: content-box;
     width: 30px;
@@ -215,5 +227,113 @@ body {
         input {
             margin-left: 5px;
         }
+    }
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@-ms-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+@keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+@-moz-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+@-webkit-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+@-ms-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+.create-puzzle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    .controls {
+        label {
+            margin-right: 10px;
+        }
+        input {
+            width: 100px;
+            margin-left: 10px;
+        }
+    }
+    p {
+        margin-top: 5px;
+    }
+    #game-key-generated {
+        padding: 3px;
+        border: 1px dashed black;
+        cursor: pointer;
+        background-color: #fde896;
+        position: relative;
+        display: inline-block;
+        input {
+            cursor: pointer;
+            background-color: #fde896;
+            border: none;
+        }
+        .copy-tooltip {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 6px;
+            
+            position: absolute;
+            z-index: 1;
+            top: -2px;
+            left: 102%;
+        }
+        &:hover {
+            .copy-tooltip {
+                visibility: visible;
+                @include prefix(animation, fadein 1s, webkit moz ms o);
+                &.copied {
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: visibility 0s 2s, opacity 2s linear;
+                }
+            }
+        }
+    }
+    .button-holder {
+        display: flex;
+        justify-content: center;
+        button {
+            margin: {
+                left: 5px;
+                right: 5px;
+            }
+        }
+        margin-bottom: 5px;
+        
     }
 }
