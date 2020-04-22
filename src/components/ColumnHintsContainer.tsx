@@ -2,7 +2,7 @@ import { State } from "../store/types";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { getSingleLineSoveState } from "../utils";
-import { ColumnHints } from "./ColumnHints";
+import { LineHints } from "./LineHints";
 
 const getSolveState = (hints: number[][], ranges: number[][][], board: string[][]): boolean[][] => {
     const transposedBoard : string[][] = [];
@@ -21,6 +21,7 @@ const mapStateToProps = (state: State) => {
   return {
     hints: state.puzzle.columns,
     solveState: getSolveState(state.puzzle.columns, state.puzzle.colRanges, state.boardHistory[0]),
+    prefix: 'column'
   };
 };
 
@@ -31,5 +32,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 const ColumnHintsContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ColumnHints);
+)(LineHints);
 export default ColumnHintsContainer;

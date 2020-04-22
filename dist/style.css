@@ -61,6 +61,7 @@
     font-size: 1.2em;
     border: 1px solid black;
     border-top: 1px transparent;
+    background-color: lightgrey;
     border-left: 1px transparent;
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
@@ -113,21 +114,14 @@
 /* .hint-square.solved:before {
     content: "";
     position: absolute;
-    border-top: 2px solid black;
-    width: 71px;
+    border-top: 4px solid #000000e0;
+    width: 42px;
     transform: rotate(45deg);
 } */
 
 .hint-square.solved {
-    background-color: lightgrey;
-}
-
-* {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
+    background-color: darkgrey;
+    color: #fff;
 }
 
 #index {
