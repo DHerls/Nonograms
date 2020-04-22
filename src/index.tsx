@@ -9,6 +9,8 @@ import CreatePuzzleContainer from "./components/CreatePuzzleContainer";
 import SolvePuzzleContainer from "./components/SolvePuzzleContainer";
 import { Home } from "./components/Home";
 
+import 'styles/style.scss'
+
 const store = createStore(
   rootReducer,
   // @ts-ignore
