@@ -1,3 +1,7 @@
+body {
+    background-color: #bae1f0;
+}
+
 .game-square {
     display: inline-block;
     border: 1px solid lightgrey;
@@ -79,7 +83,6 @@
 
 .puzzle-board {
     padding: 10px;
-    background-color: wheat;
 }
 
 .hint-columns {
@@ -103,6 +106,14 @@
 
 .game-square:nth-child(5n), .hint-column:nth-child(5n) .hint-square {
     border-right-width: 3px;
+}
+
+.game-row:nth-last-child(1) .game-square, .hint-row:nth-last-child(1) .hint-square{
+    border-bottom: 1px solid black;
+}
+
+.game-square:nth-last-child(1), .hint-column:nth-last-child(1) .hint-square {
+    border-right: 1px solid black;
 }
 
 .hint-square, .game-square {
