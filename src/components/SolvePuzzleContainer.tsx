@@ -10,7 +10,9 @@ interface SolvePuzzleContainerProps extends RouteComponentProps<{key: string}>{
 }
 
 const mapStateToProps = (state: State, ) => {
-  return {};
+  return {
+    isValid: state.puzzle.rows.length > 0
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch, ownProps: SolvePuzzleContainerProps) => {

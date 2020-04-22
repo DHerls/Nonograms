@@ -1,4 +1,4 @@
-import { SetSquareStateAction, SET_SQUARE_STATE, StartDragAction, START_DRAG, ContinueDragAction, CONTINUE_DRAG, STOP_DRAG, UNDO, UndoAction, ClearAction, CLEAR, SetCreateRows, SET_CREATE_ROWS, SetCreateColumns, SET_CREATE_COLUMNS, SetPuzzle, SET_PUZZLE, Puzzle } from "./types"
+import { SetSquareStateAction, SET_SQUARE_STATE, StartDragAction, START_DRAG, ContinueDragAction, CONTINUE_DRAG, STOP_DRAG, UNDO, UndoAction, ClearAction, CLEAR, SetCreateRows, SET_CREATE_ROWS, SetCreateColumns, SET_CREATE_COLUMNS, SetPuzzle, SET_PUZZLE, Puzzle, SetBoardHistory, SET_BOARD_HISTORY } from "./types"
 
 export const setSquareState = (row: number, column: number, state: string) : SetSquareStateAction => {
     return {
@@ -61,5 +61,13 @@ export const setPuzzle = (puzzle: Puzzle): SetPuzzle => {
     return {
         type: SET_PUZZLE,
         puzzle: puzzle
+    }
+}
+
+
+export const setBoardHistory = (boardHistory: string[][][]): SetBoardHistory => {
+    return {
+        type: SET_BOARD_HISTORY,
+        boardHistory: boardHistory
     }
 }

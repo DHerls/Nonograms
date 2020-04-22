@@ -34,7 +34,7 @@ export const CreatePuzzle = (props: CreatePuzzleProps) => {
     <div className="create-puzzle">
       <p>
         Share this puzzle:{" "}
-        <span id="game-key-generated" onMouseLeave={onMouseLeave}>
+        <span id="game-key-generated" onMouseLeave={onMouseLeave} onClick={onGameKeyClick}>
           <input
             value={props.shareURL}
             onClick={onGameKeyClick}

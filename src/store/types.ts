@@ -53,6 +53,11 @@ export interface SetPuzzle extends Action {
     puzzle: Puzzle;
 }
 
+export const SET_BOARD_HISTORY = 'SET_BOARD_HISTORY';
+export interface SetBoardHistory extends Action {
+    boardHistory: string[][][];
+}
+
 
 export interface Puzzle {
     rows: number[][],

@@ -1,4 +1,4 @@
-import {EMPTY, State, Action, SET_SQUARE_STATE, ActionSet, SetSquareStateAction, START_DRAG, StartDragAction, CONTINUE_DRAG, ContinueDragAction, STOP_DRAG, UNDO, Puzzle, CLEAR, SET_CREATE_ROWS, SetCreateRows, SET_CREATE_COLUMNS, SetCreateColumns, SET_PUZZLE, SetPuzzle} from './types'
+import {EMPTY, State, Action, SET_SQUARE_STATE, ActionSet, SetSquareStateAction, START_DRAG, StartDragAction, CONTINUE_DRAG, ContinueDragAction, STOP_DRAG, UNDO, Puzzle, CLEAR, SET_CREATE_ROWS, SetCreateRows, SET_CREATE_COLUMNS, SetCreateColumns, SET_PUZZLE, SetPuzzle, SET_BOARD_HISTORY, SetBoardHistory} from './types'
 import { findSolutionRanges } from '../utils';
 
 
@@ -235,6 +235,12 @@ export const rootReducer = (state: State = initialState, action: ActionSet) : St
               ),
             ],
           };
+      case SET_BOARD_HISTORY:
+        const sbhAction = action as SetBoardHistory;
+        return {
+          ...state,
+          boardHistory: sbhAction.boardHistory
+        }
       default:
         return state;
     }
