@@ -3,8 +3,8 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { CreatePuzzle } from "./CreatePuzzle";
 import * as React from 'react';
-import { setCreateRows, setCreateColumns } from "../store/actions";
-import { encodeBoardToKey } from "../utils";
+import { setCreateRows, setCreateColumns, setBoardHistory } from "../store/actions";
+import { encodeBoardToKey, createEmptyBoard } from "../utils";
 
 
 const mapStateToProps = (state: State) => {
@@ -18,7 +18,8 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onRowsChange: (e: React.ChangeEvent<HTMLInputElement>) => {dispatch(setCreateRows(parseInt(e.target.value)))},
-        onColumnsChange: (e: React.ChangeEvent<HTMLInputElement>) => {dispatch(setCreateColumns(parseInt(e.target.value)))}
+        onColumnsChange: (e: React.ChangeEvent<HTMLInputElement>) => {dispatch(setCreateColumns(parseInt(e.target.value)))},
+        onMount: () => {dispatch(setBoardHistory([createEmptyBoard(10, 10)]))}
     }
 }
 

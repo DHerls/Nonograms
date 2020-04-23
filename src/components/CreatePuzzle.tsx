@@ -9,73 +9,96 @@ interface CreatePuzzleProps {
     shareURL: string,
     onRowsChange: (e: React.ChangeEvent) => void,
     onColumnsChange: (e: React.ChangeEvent) => void,
+    onMount: () => void;
 }
 
-export const CreatePuzzle = (props: CreatePuzzleProps) => {
+interface CreatePuzzleState {
+  copyState: number
+}
 
-  // 0 = waiting, 1 = success, -1 = error
-  const [copyState, setCopyState] = React.useState<number>(0);
+export class CreatePuzzle extends React.Component<CreatePuzzleProps, CreatePuzzleState> {
+
+  constructor(props: CreatePuzzleProps){
+    super(props);
+    this.state = {
+      copyState: 0
+    };
+    this.onGameKeyClick = this.onGameKeyClick.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.onMount();
+  }
+
+  setCopyState(state: number){
+    this.setState({
+      copyState: state
+    })
+  }  
   
-  const onGameKeyClick = (e: React.MouseEvent<HTMLInputElement>) => {
+  onGameKeyClick(e: React.MouseEvent<HTMLInputElement>) {
     e.currentTarget.select();
     if (document.execCommand('copy')){
       e.currentTarget.parentElement.focus();
-      setCopyState(1);
+      this.setCopyState(1);
     } else {
-      setCopyState(-1);
+      this.setCopyState(-1);
     }
   }
 
-  const onMouseLeave = (e: React.MouseEvent<HTMLInputElement>) => {
-    setCopyState(0);
+  onMouseLeave(e: React.MouseEvent<HTMLInputElement>) {
+    this.setCopyState(0);
   }
 
-  return (
-    <div className="create-puzzle">
-      <p>
-        Share this puzzle:{" "}
-        <span id="game-key-generated" onMouseLeave={onMouseLeave} onClick={onGameKeyClick}>
-          <input
-            value={props.shareURL}
-            onClick={onGameKeyClick}
-            readOnly={true}
-          />
-          <span className={`copy-tooltip${copyState === 1 ? " copied" : ""}`}>
-            {copyState === 0
-              ? "Click to copy"
-              : copyState === 1
-              ? "Copied"
-              : "Ctrl + C to copy"}
+  render() {
+    return (
+      <div className="create-puzzle">
+        <p>
+          Share this puzzle:{" "}
+          <span id="game-key-generated" onMouseLeave={this.onMouseLeave} onClick={this.onGameKeyClick}>
+            <input
+              value={this.props.shareURL}
+              onClick={this.onGameKeyClick}
+              readOnly={true}
+            />
+            <span className={`copy-tooltip${this.state.copyState === 1 ? " copied" : ""}`}>
+              {this.state.copyState === 0
+                ? "Click to copy"
+                : this.state.copyState === 1
+                ? "Copied"
+                : "Ctrl + C to copy"}
+            </span>
           </span>
-        </span>
-      </p>
-      <div className="controls">
-        <form>
-          <label>
-            Number of rows:
-            <input
-              name="row"
-              type="number"
-              value={props.rows}
-              onChange={props.onRowsChange}
-            />
-          </label>
-          <label>
-            Number of columns:
-            <input
-              name="col"
-              type="number"
-              value={props.columns}
-              onChange={props.onColumnsChange}
-            />
-          </label>
-        </form>
-        <div className="button-holder">
-          <UndoButtonContainer />
-          <ClearButtonContainer />
+        </p>
+        <div className="controls">
+          <form>
+            <label>
+              Number of rows:
+              <input
+                name="row"
+                type="number"
+                value={this.props.rows}
+                onChange={this.props.onRowsChange}
+              />
+            </label>
+            <label>
+              Number of columns:
+              <input
+                name="col"
+                type="number"
+                value={this.props.columns}
+                onChange={this.props.onColumnsChange}
+              />
+            </label>
+          </form>
+          <div className="button-holder">
+            <UndoButtonContainer />
+            <ClearButtonContainer />
+          </div>
         </div>
+        <GameBoardContainer />
       </div>
-      <GameBoardContainer />
-    </div>
-  );
+    );
+  }
 }

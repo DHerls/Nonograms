@@ -6,7 +6,7 @@ interface GameBoardProps {
     onSquareClick: (row: number, column: number, state: string) => void,
     onSquareRightClick: (row: number, column: number, state: string) => void,
     onSquareMouseDown: (row: number, column: number, state: string) => void,
-    onSquareMouseUp: () => void,
+    onSquareMouseUp: (row: number, column: number) => void,
     onSquareMouseEnter: (row: number, column: number) => void,
     onMouseUp: () => void,
 }
@@ -30,7 +30,9 @@ export class GameBoard extends React.Component<GameBoardProps, {}> {
                 onMouseDown={() => {
                   this.props.onSquareMouseDown(index, i2, state);
                 }}
-                onMouseUp={this.props.onSquareMouseUp}
+                onMouseUp={() => {
+                  this.props.onSquareMouseUp(index, i2);
+                }}
                 onMouseEnter={() => {
                   this.props.onSquareMouseEnter(index, i2);
                 }}

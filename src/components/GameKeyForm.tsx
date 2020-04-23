@@ -25,7 +25,7 @@ export const GameKeyForm = () => {
             onChange={onKeyChange}
           />
         </label>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary game-key-go">
           Go
         </button>
       </form>

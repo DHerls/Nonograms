@@ -1,5 +1,18 @@
 import { FILLED, BLOCKED, EMPTY, Puzzle } from "./store/types";
 
+
+export const createEmptyBoard = (rows: number, columns: number): string[][] => {
+    const board: string[][] = [];
+    let row: string[] = [];
+    for (let i = 0; i < rows; i++) {
+        row = Array(columns);
+        row.fill(EMPTY);
+        board.push(row);
+    }
+    return board;
+}
+
+
 export const boardToChunks = (segment: string[]): number[] => {
     let length = 0;
     const chunks = [];

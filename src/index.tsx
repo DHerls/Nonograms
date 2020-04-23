@@ -10,6 +10,7 @@ import SolvePuzzleContainer from "./components/SolvePuzzleContainer";
 import { Home } from "./components/Home";
 
 import 'styles/style.scss'
+import { NavBar } from "./components/NavBar";
 
 const store = createStore(
   rootReducer,
@@ -21,12 +22,18 @@ const store = createStore(
 window.addEventListener('mouseup', () => {store.dispatch(stopDrag())});
 
 ReactDOM.render(
-    <Provider store={store}>
-      <Router>
-        <Route exact path="/" component={Home} />
-        <Route path='/solve/:key' component={SolvePuzzleContainer} />
-        <Route path="/create" component={CreatePuzzleContainer} />
-      </Router>
-    </Provider>,
-    document.getElementById("root")
+  <Provider store={store}>
+    <Router>
+      <Route exact path="/" component={Home} />
+      <Route path="/solve/:key">
+        <NavBar />
+        <SolvePuzzleContainer />
+      </Route>
+      <Route path="/create">
+        <NavBar />
+        <CreatePuzzleContainer />
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById("root")
 );

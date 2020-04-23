@@ -1,5 +1,5 @@
 import {EMPTY, State, Action, SET_SQUARE_STATE, ActionSet, SetSquareStateAction, START_DRAG, StartDragAction, CONTINUE_DRAG, ContinueDragAction, STOP_DRAG, UNDO, Puzzle, CLEAR, SET_CREATE_ROWS, SetCreateRows, SET_CREATE_COLUMNS, SetCreateColumns, SET_PUZZLE, SetPuzzle, SET_BOARD_HISTORY, SetBoardHistory} from './types'
-import { findSolutionRanges } from '../utils';
+import { findSolutionRanges, createEmptyBoard } from '../utils';
 
 
 const rowHints = [
@@ -36,18 +36,6 @@ const puzzle : Puzzle = {
     columns: colHints,
     rowRanges: rowHints.map((hints) => findSolutionRanges(hints, NUM_COLS)),
     colRanges: colHints.map((hints) => findSolutionRanges(hints, NUM_ROWS)),
-}
-
-
-const createEmptyBoard = (rows: number, columns: number) : string[][] =>{
-    const board: string[][] = [];
-    let row: string[] = [];
-    for (let i = 0; i < rows; i++) {
-        row = Array(columns);
-        row.fill(EMPTY);
-        board.push(row);
-    }
-    return board;
 }
 
 
@@ -204,7 +192,7 @@ export const rootReducer = (state: State = initialState, action: ActionSet) : St
         };
       case SET_CREATE_ROWS:
         const scrAction = action as SetCreateRows;
-        if (scrAction.rows > 30 || scrAction.rows < 1){
+        if (isNaN(scrAction.rows) || scrAction.rows > 30 || scrAction.rows < 1){
             return state;
         }
         return {
@@ -213,7 +201,7 @@ export const rootReducer = (state: State = initialState, action: ActionSet) : St
         };
       case SET_CREATE_COLUMNS:
         const sccAction = action as SetCreateColumns;
-        if (sccAction.columns > 30 || sccAction.columns < 1) {
+        if (isNaN(sccAction.columns) || sccAction.columns > 30 || sccAction.columns < 1) {
           return state;
         }
         return {

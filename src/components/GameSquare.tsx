@@ -28,8 +28,8 @@ export class GameSquare extends React.Component<GameSquareProps, {}> {
             onMouseDown={this.props.onMouseDown}
             onMouseUp={this.props.onMouseUp}
             onMouseEnter={this.props.onMouseEnter}
-            onDrag={(e) => {e.preventDefault()}}
-            draggable={false}
+            onPointerDown={this.props.onMouseDown}
+            onPointerUp={this.props.onMouseUp}
           ></div>
         ); 
     };

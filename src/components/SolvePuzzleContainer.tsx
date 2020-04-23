@@ -3,7 +3,7 @@ import { Dispatch } from "redux"
 import { connect } from "react-redux"
 import { SolvePuzzle } from "./SolvePuzzle"
 import { decodeKeyToPuzzle } from "../utils"
-import { RouteComponentProps } from "react-router-dom"
+import { RouteComponentProps, withRouter } from "react-router-dom"
 import { setPuzzle } from "../store/actions"
 
 interface SolvePuzzleContainerProps extends RouteComponentProps<{key: string}>{
@@ -21,6 +21,6 @@ const mapDispatchToProps = (dispatch: Dispatch, ownProps: SolvePuzzleContainerPr
     }
 }
 
-const SolvePuzzleContainer = connect(mapStateToProps, mapDispatchToProps)(SolvePuzzle);
+const SolvePuzzleContainer = withRouter(connect(mapStateToProps,mapDispatchToProps)(SolvePuzzle));
 
 export default SolvePuzzleContainer;
