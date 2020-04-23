@@ -1,23 +1,12 @@
 import * as React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { GameKeyForm } from './GameKeyForm';
 
 export const Home = ({}) => {
     const puzzleKeys = [
       "4:3:5:71:17:215:45:241:41:4;2:5:23:51:43:A:81:151:13:6",
       "233:227:221:116:5222:13111323:33131212:311111212:33131212:13111323:5222:116:231:326:223;22:11:5:1111:152:2111:272:33:7:33:271:2112:152:1221:9:11:D:191:1111:191:1221:1222:231:111:1",
     ];
-
-    const [gameKey, setGameKey] = React.useState<string>("");
-    const history = useHistory();
-
-    const onKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setGameKey(e.target.value);
-    }
-
-    const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        history.push(`/solve/${gameKey}`)
-    }
 
     return (
       <div className="container">
@@ -39,20 +28,7 @@ export const Home = ({}) => {
             </ul>
           </div>
           <h2>Solve Custom Puzzles</h2>
-          <form onSubmit={onFormSubmit} id="game-key-nav">
-            <label>
-              Game key:
-              <input
-                type="text"
-                name="gameKey"
-                value={gameKey}
-                onChange={onKeyChange}
-              />
-            </label>
-            <button type="submit" className="btn btn-primary">
-              Go
-            </button>
-          </form>
+          <GameKeyForm />
           <h2>Create Custom Puzzles</h2>
           <Link to="/create" className="btn btn-primary">
             Create
