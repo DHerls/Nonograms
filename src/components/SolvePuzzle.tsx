@@ -8,7 +8,11 @@ import { GameKeyCopyButton } from './GameKeyCopyButton';
 interface SolvePuzzleProps {
     onMount: () => void;
     isValid: boolean,
-    shareURL: string
+    shareURL: string,
+    dimensions: {
+        rows: number,
+        columns: number
+    }
 }
 
 export class SolvePuzzle extends React.Component<SolvePuzzleProps> {
@@ -19,14 +23,21 @@ export class SolvePuzzle extends React.Component<SolvePuzzleProps> {
 
     render() {
         if (!this.props.isValid){
-            return <InvalidBoardContainer />;
+            return <InvalidBoardContainer type="key" />;
         }
         return (
           <div>
+              <div className="info-panel">
+                  <p className="puzzle-dimensions">{this.props.dimensions.rows} x {this.props.dimensions.columns}</p>
+                  <div className="button-holder">
+                    <UndoButtonContainer />
+                    <ClearButtonContainer />
+                  </div>
+              </div>
             <PuzzleBoardContainer />
-            <GameKeyCopyButton shareURL={this.props.shareURL} />
-            <UndoButtonContainer />
-            <ClearButtonContainer />
+            <div className="copy-key-holder">
+                <GameKeyCopyButton shareURL={this.props.shareURL} />
+            </div>
           </div>
         );
     }   

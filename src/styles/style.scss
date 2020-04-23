@@ -53,9 +53,6 @@ body {
         left: 1px transparent;
     };
     touch-action: none;
-    -webkit-user-drag: none;
-    -moz-user-drag: none;
-    user-drag: none;
 
     &.filled {
         background-color: black;
@@ -353,6 +350,7 @@ nav {
     display: flex;
     justify-content: center;
     border-bottom: 1px solid black;
+    margin-bottom: 5px;
     background-color: #f0f0f0;
     padding-bottom: 5px;
     padding-top: 3px;
@@ -385,4 +383,23 @@ nav {
         }
     }
     
+}
+
+.info-panel {
+    display: flex;
+    justify-content: center;
+    .puzzle-dimensions {
+        font-size: 1.3rem;
+        margin-right: 10px;
+    }
+    .button-holder {
+        button {
+            margin-right: 5px;
+        }
+    }
+}
+
+.copy-key-holder {
+    display: flex;
+    justify-content: center;
 }

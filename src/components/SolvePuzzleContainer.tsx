@@ -13,6 +13,10 @@ const mapStateToProps = (state: State, ownProps: SolvePuzzleContainerProps) => {
   return {
     isValid: state.puzzle.rows.length > 0,
     shareURL: ownProps.match.params.key,
+    dimensions: {
+      rows: state.boardHistory[0].length,
+      columns: state.boardHistory[0].length > 0 ? state.boardHistory[0][0].length : 0
+    }
   };
 };
 

@@ -12,7 +12,11 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onClick: () => {dispatch(clear())}
+        onClick: () => {
+            if (confirm("Clear entire puzzle?")) {
+                dispatch(clear())
+            }
+        }
     }
 }
 

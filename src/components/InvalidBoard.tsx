@@ -3,6 +3,7 @@ import GameBoardContainer from './GameBoardContainer'
 
 interface InvalidBoardProps {
     onMount: () => void;
+    message: string
 }
 
 export class InvalidBoard extends React.Component<InvalidBoardProps, {}> {
@@ -14,7 +15,7 @@ export class InvalidBoard extends React.Component<InvalidBoardProps, {}> {
     render() {
         return (
           <div className="invalid-key">
-            <p>The game key provided is invalid.</p>
+            <p>{this.props.message}</p>
             <GameBoardContainer />
           </div>
         );
