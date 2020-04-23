@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { GameKeyForm } from './GameKeyForm';
+import { GameKeyNavForm } from './GameKeyNavForm';
 
 export const NavBar = () => {
     return (
@@ -13,7 +13,7 @@ export const NavBar = () => {
             <Link to="/create">Create</Link>
           </li>
           <li>
-            <GameKeyForm />
+            <GameKeyNavForm />
           </li>
         </ul>
       </nav>

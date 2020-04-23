@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { GameKeyForm } from './GameKeyForm';
+import { GameKeyNavForm } from './GameKeyNavForm';
 
 export const Home = ({}) => {
     const puzzleKeys = [
@@ -28,7 +28,7 @@ export const Home = ({}) => {
             </ul>
           </div>
           <h2>Solve Custom Puzzles</h2>
-          <GameKeyForm />
+          <GameKeyNavForm />
           <h2>Create Custom Puzzles</h2>
           <Link to="/create" className="btn btn-primary">
             Create

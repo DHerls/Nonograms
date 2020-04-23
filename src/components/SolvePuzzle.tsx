@@ -3,10 +3,12 @@ import PuzzleBoardContainer from "./PuzzleBoardContainer";
 import ClearButtonContainer from "./ClearButtonContainer";
 import UndoButtonContainer from "./UndoButtonContainer";
 import InvalidBoardContainer from './InvalidBoardContainer';
+import { GameKeyCopyButton } from './GameKeyCopyButton';
 
 interface SolvePuzzleProps {
     onMount: () => void;
-    isValid: boolean
+    isValid: boolean,
+    shareURL: string
 }
 
 export class SolvePuzzle extends React.Component<SolvePuzzleProps> {
@@ -20,11 +22,12 @@ export class SolvePuzzle extends React.Component<SolvePuzzleProps> {
             return <InvalidBoardContainer />;
         }
         return (
-            <div>
+          <div>
             <PuzzleBoardContainer />
+            <GameKeyCopyButton shareURL={this.props.shareURL} />
             <UndoButtonContainer />
             <ClearButtonContainer />
-            </div>
+          </div>
         );
     }   
 }

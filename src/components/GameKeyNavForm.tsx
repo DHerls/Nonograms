@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
-export const GameKeyForm = () => {
+export const GameKeyNavForm = () => {
     const [gameKey, setGameKey] = React.useState<string>("");
     const history = useHistory();
 

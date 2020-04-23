@@ -9,9 +9,10 @@ import { setPuzzle } from "../store/actions"
 interface SolvePuzzleContainerProps extends RouteComponentProps<{key: string}>{
 }
 
-const mapStateToProps = (state: State, ) => {
+const mapStateToProps = (state: State, ownProps: SolvePuzzleContainerProps) => {
   return {
-    isValid: state.puzzle.rows.length > 0
+    isValid: state.puzzle.rows.length > 0,
+    shareURL: ownProps.match.params.key,
   };
 };
 

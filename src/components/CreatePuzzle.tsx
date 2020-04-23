@@ -2,6 +2,7 @@ import * as React from 'react';
 import GameBoardContainer from './GameBoardContainer';
 import UndoButtonContainer from './UndoButtonContainer';
 import ClearButtonContainer from './ClearButtonContainer';
+import { GameKeyCopyButton } from './GameKeyCopyButton';
 
 interface CreatePuzzleProps {
     rows: number,
@@ -12,65 +13,16 @@ interface CreatePuzzleProps {
     onMount: () => void;
 }
 
-interface CreatePuzzleState {
-  copyState: number
-}
-
-export class CreatePuzzle extends React.Component<CreatePuzzleProps, CreatePuzzleState> {
-
-  constructor(props: CreatePuzzleProps){
-    super(props);
-    this.state = {
-      copyState: 0
-    };
-    this.onGameKeyClick = this.onGameKeyClick.bind(this);
-    this.onMouseLeave = this.onMouseLeave.bind(this);
-  }
+export class CreatePuzzle extends React.Component<CreatePuzzleProps, {}> {
 
   componentDidMount() {
     this.props.onMount();
   }
 
-  setCopyState(state: number){
-    this.setState({
-      copyState: state
-    })
-  }  
-  
-  onGameKeyClick(e: React.MouseEvent<HTMLInputElement>) {
-    e.currentTarget.select();
-    if (document.execCommand('copy')){
-      e.currentTarget.parentElement.focus();
-      this.setCopyState(1);
-    } else {
-      this.setCopyState(-1);
-    }
-  }
-
-  onMouseLeave(e: React.MouseEvent<HTMLInputElement>) {
-    this.setCopyState(0);
-  }
-
   render() {
     return (
       <div className="create-puzzle">
-        <p>
-          Share this puzzle:{" "}
-          <span id="game-key-generated" onMouseLeave={this.onMouseLeave} onClick={this.onGameKeyClick}>
-            <input
-              value={this.props.shareURL}
-              onClick={this.onGameKeyClick}
-              readOnly={true}
-            />
-            <span className={`copy-tooltip${this.state.copyState === 1 ? " copied" : ""}`}>
-              {this.state.copyState === 0
-                ? "Click to copy"
-                : this.state.copyState === 1
-                ? "Copied"
-                : "Ctrl + C to copy"}
-            </span>
-          </span>
-        </p>
+        <GameKeyCopyButton shareURL={this.props.shareURL} />
         <div className="controls">
           <form>
             <label>
