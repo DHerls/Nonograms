@@ -38,9 +38,13 @@ const previousSquareState = (currentState: string) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onSquareClick: (row : number, col : number, state : string) => {dispatch(setSquareState(row, col, nextSquareState(state)))},
+        onSquareClick: (row : number, col : number, state : string) => {
+          dispatch(setSquareState(row, col, nextSquareState(state)));
+        },
         onSquareRightClick: (row : number, col : number, state : string) => {dispatch(setSquareState(row, col, previousSquareState(state)))},
-        onSquareMouseDown: (row: number, col: number, state: string) => {dispatch(startDrag(row, col, state))},
+        onSquareMouseDown: (row: number, col: number, state: string) => {
+          dispatch(startDrag(row, col));
+        },
         onSquareMouseUp: () => {dispatch(stopDrag())},
         onSquareMouseEnter: (row: number, col: number) => {dispatch(continueDrag(row, col))},
         onMouseUp: () => {dispatch(stopDrag())},

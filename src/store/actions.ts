@@ -9,12 +9,11 @@ export const setSquareState = (row: number, column: number, state: string) : Set
     }
 }
 
-export const startDrag = (row: number, column: number, state: string) : StartDragAction => {
+export const startDrag = (row: number, column: number) : StartDragAction => {
     return {
         type: START_DRAG,
         row: row,
         col: column,
-        state: state
     }
 }
 

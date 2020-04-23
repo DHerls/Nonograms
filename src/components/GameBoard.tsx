@@ -25,9 +25,14 @@ export class GameBoard extends React.Component<GameBoardProps, {}> {
                 }}
                 onContextMenu={(e: React.MouseEvent) => {
                     e.preventDefault();
-                    this.props.onSquareRightClick(index, i2, state);
                 }}
-                onMouseDown={() => {
+                onMouseDown={(e: React.MouseEvent) => {
+                  if (e.button === 0){
+                    this.props.onSquareClick(index, i2, state);
+                  } else {
+                    e.preventDefault();
+                    this.props.onSquareRightClick(index, i2, state);
+                  }
                   this.props.onSquareMouseDown(index, i2, state);
                 }}
                 onMouseUp={() => {

@@ -15,7 +15,6 @@ export const START_DRAG = 'START_DRAG';
 export interface StartDragAction extends Action {
     row: number,
     col: number,
-    state: string
 }
 
 export const STOP_DRAG = 'STOP_DRAG';

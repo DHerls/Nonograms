@@ -138,23 +138,28 @@ const changeColNumber = (board: string[][], numCols: number): string[][] => {
 }
 
 
+const setSquareState = (board:string[][], rowNum: number, columnNum: number, state: string): string[][] => {
+  const newBoard = board.map((row, index) => {
+    if (index === rowNum) {
+      const newRow = [...row];
+      newRow[columnNum] = state;
+      return newRow;
+    }
+    return [...row];
+  });
+  return newBoard;
+};
+
+
 
 export const rootReducer = (state: State = initialState, action: ActionSet) : State => {
-    let newBoard = []
+    let newBoard :string[][] = []
     switch (action.type) {
       case SET_SQUARE_STATE:
         const setAction = action as SetSquareStateAction;
-        newBoard = state.boardHistory[0].map((row, index) => {
-          if (index === setAction.row) {
-            const newRow = [...row];
-            newRow[setAction.col] = setAction.state;
-            return newRow;
-          }
-          return [...row];
-        });
         return {
           ...state,
-          boardHistory: [newBoard, ...state.boardHistory],
+          boardHistory: [setSquareState(state.boardHistory[0], setAction.row, setAction.col, setAction.state), ...state.boardHistory],
         };
       case START_DRAG:
         const startAction = action as StartDragAction;
@@ -164,7 +169,7 @@ export const rootReducer = (state: State = initialState, action: ActionSet) : St
             isDragging: true,
             dragStartRow: startAction.row,
             dragStartCol: startAction.col,
-            dragState: startAction.state,
+            dragState: state.boardHistory[0][startAction.row][startAction.col],
             dragBoard: state.boardHistory[0].map((row) => [...row]),
           },
         };

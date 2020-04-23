@@ -4,7 +4,7 @@ import { FILLED, BLOCKED } from '../store/types';
 interface GameSquareProps {
     status: string
     onClick: () => void
-    onMouseDown: () => void
+    onMouseDown: (e: React.MouseEvent) => void
     onContextMenu: (e: React.MouseEvent) => void
     onMouseEnter: () => void
     onMouseUp: () => void
@@ -23,13 +23,10 @@ export class GameSquare extends React.Component<GameSquareProps, {}> {
         return (
           <div
             className={`game-square ${this.cssClass()}`}
-            onClick={this.props.onClick}
             onContextMenu={this.props.onContextMenu}
             onMouseDown={this.props.onMouseDown}
             onMouseUp={this.props.onMouseUp}
             onMouseEnter={this.props.onMouseEnter}
-            onPointerDown={this.props.onMouseDown}
-            onPointerUp={this.props.onMouseUp}
           ></div>
         ); 
     };
