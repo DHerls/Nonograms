@@ -11,7 +11,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build and run webpack
-      run: |
-        docker build -t non .
+    - name: Build container
+      run: docker build -t non .
+    - name: Run tests
+      run: docker run non npm test
+    - name: Run webpack
         docker run non
