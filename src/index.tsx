@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {rootReducer} from './store/reducers';
-import { createStore } from 'redux';
+import { createStore, Store } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { stopDrag } from "./store/actions";
@@ -13,11 +13,18 @@ import 'styles/style.scss'
 import { NavBar } from "./components/NavBar";
 import InvalidBoardContainer from "./components/InvalidBoardContainer";
 
-const store = createStore(
-  rootReducer,
-  // @ts-ignore
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+
+let store : Store = null;
+if (process.env.NODE_ENV === "development"){
+  store = createStore(
+    rootReducer,
+    // @ts-ignore
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+} else {
+  store = createStore(rootReducer);
+}
+  
 
 // Do our best to stop the dragging action no matter where the mouse is on the screen
 window.addEventListener('mouseup', () => {store.dispatch(stopDrag())});
