@@ -13,5 +13,5 @@ jobs:
 
     - name: Build and run webpack
       run: |
-        docker build -t non .,
+        docker build -t non .
         docker run non
