@@ -18,7 +18,7 @@ jobs:
     - name: Run webpack
       run: |
         pwd
-        docker run -v /home/ubuntu:/usr/src/app non 
+        docker run -v $(pwd):/usr/src/app non 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
