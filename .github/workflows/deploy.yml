@@ -10,11 +10,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
+    - name: Build container
+      run: docker build -t non .
     - name: Run tests
-      run: docker-compose run react npm test
+      run: docker run non npm test
     - name: Run webpack
-      run: docker-compose run react npm prod
+      run: docker run -v dist:/usr/src/app non npm prod
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -23,5 +24,9 @@ jobs:
         aws-region: us-east-1
     - name: Copy files to S3 with the AWS CLI
       run: |
-        cp ./public/* ./dist/
+        mkdir dist
+        cd dist
+        docker container create --name temp -v dist:/data react
+        docker cp temp:/data/dist/* .
+        docker cp temp:/data/public/* .
         aws s3 sync ./dist s3://nonograms
