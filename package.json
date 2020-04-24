@@ -1,7 +1,7 @@
 {
-  "name": "app",
+  "name": "nonograms",
   "version": "1.0.0",
-  "description": "",
+  "description": "React webapp for nonograms",
   "main": "index.js",
   "scripts": {
     "prod": "webpack",

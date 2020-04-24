@@ -1,8 +1,8 @@
 FROM node:10.13-alpine
-ENV NODE_ENV production
+ENV NODE_ENV development
 WORKDIR /usr/src/app
 COPY package.json .
 COPY package-lock.json .
 RUN npm install --dev
 COPY . .
-CMD npm prod
+CMD npm run prod
