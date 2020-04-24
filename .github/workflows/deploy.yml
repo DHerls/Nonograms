@@ -15,7 +15,7 @@ jobs:
     - name: Run tests
       run: docker run non npm test
     - name: Run webpack
-      run: docker run -v dist:/usr/src/app non npm prod
+      run: docker run -v dist:/usr/src/app non npm run prod
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
