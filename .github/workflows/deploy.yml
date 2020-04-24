@@ -28,4 +28,4 @@ jobs:
       run: |
         cd dist
         cp ../public/* .
-        aws s3 sync ./dist s3://nonograms
+        aws s3 sync . s3://nonograms
