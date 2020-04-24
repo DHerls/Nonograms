@@ -13,7 +13,6 @@ export class PuzzleBoard extends React.Component<PuzzleBoardProps, {}> {
     render() {
         return (
             <div className={`puzzle-board${this.props.isSolved ? ' solved' : ''}`}>
-              {this.props.isSolved ? <p>Solved!</p> : ''}
               <div className="hint-area">
                   <ColumnHintsContainer />
                   <RowHintsContainer />

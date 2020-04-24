@@ -196,6 +196,25 @@ body {
 
 .puzzle-board {
     padding: 10px;
+    &.solved {
+        .game-square {
+            border-color: white;
+            &.filled {
+                border-color: black;
+            }
+            &.blocked {
+                &::after {
+                    display: none;
+                }
+                &::before {
+                    display: none;
+                }
+            }
+        }
+        .hint-square.solved {
+            color: #b3ff00;
+        }
+    }
 }
 
 .hint-columns {
