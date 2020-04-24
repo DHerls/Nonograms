@@ -26,7 +26,7 @@ jobs:
       run: |
         mkdir dist
         cd dist
-        docker container create --name temp -v dist:/data react
+        docker container create --name temp -v dist:/data non
         docker cp temp:/data/dist/* .
         docker cp temp:/data/public/* .
         aws s3 sync ./dist s3://nonograms
