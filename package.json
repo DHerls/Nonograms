@@ -4,9 +4,9 @@
   "description": "React webapp for nonograms",
   "main": "index.js",
   "scripts": {
-    "prod": "webpack",
-    "dev": "webpack-dev-server",
-    "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json"
+    "build": "/usr/src/node_modules/.bin/webpack-cli",
+    "serve": "/usr/src/node_modules/.bin/webpack-dev-server",
+    "test": "/usr/src/node_modules/.bin/ts-node /usr/src/node_modules/jasmine/bin/jasmine --config=jasmine.json"
   },
   "keywords": [],
   "author": "Dan Herlihy",
@@ -22,6 +22,7 @@
     "@types/react-redux": "^7.1.7",
     "@types/react-router-dom": "^5.1.4",
     "css-loader": "^3.5.2",
+    "html-webpack-plugin": "^4.2.0",
     "jasmine": "^3.5.0",
     "sass": "^1.26.3",
     "sass-loader": "^8.0.2",

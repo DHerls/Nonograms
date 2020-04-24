@@ -1,10 +1,8 @@
 var path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: process.env.NODE_ENV,
-
-  // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
@@ -43,13 +41,29 @@ module.exports = {
     ],
   },
 
-  // When importing a module whose path matches one of the following, just
-  // assume a corresponding global variable exists and use that instead.
-  // This is important because it allows us to avoid bundling all of our
-  // dependencies, which allows browsers to cache those libraries between builds.
-  externals: {
-    react: "React",
-    "react-dom": "ReactDOM",
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "Custom template",
+      // Load a custom template (lodash by default)
+      template: path.join(__dirname, "src/index.html"),
+    }),
+  ],
+
+  output: {
+    filename: "[name].[contenthash].js",
+  },
+  optimization: {
+    runtimeChunk: "single",
+    moduleIds: "hashed",
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
   },
 
   devServer: {
@@ -60,3 +74,7 @@ module.exports = {
     historyApiFallback: true,
   },
 };
+
+if (process.env.NODE_ENV === "development") {
+  module.exports.devtool = "source-map";
+}
