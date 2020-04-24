@@ -16,9 +16,7 @@ jobs:
     - name: Run tests
       run: docker run non npm test
     - name: Run webpack
-      run: |
-        pwd
-        docker run -v $(pwd):/usr/src/app non 
+      run: docker run non 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -27,5 +25,8 @@ jobs:
         aws-region: us-east-1
     - name: Copy files to S3 with the AWS CLI
       run: |
-        cp ./dist/* ./public
+        mkdir dist
+        cd dist
+        docker cp non:/usr/src/app/dist/* .
+        docker cp non:/usr/src/app/public/* .
         aws s3 sync ./public s3://nonograms
