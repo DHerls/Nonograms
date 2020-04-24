@@ -16,4 +16,4 @@ jobs:
     - name: Run tests
       run: docker run non npm test
     - name: Run webpack
-        docker run non
+      run: docker run non
