@@ -17,7 +17,7 @@ jobs:
     - name: Run webpack
       run: |
         mkdir dist
-        docker run -v $(pwd)/dist:/usr/src/app/dist non npm run prod
+        docker run -v $(pwd)/dist:/usr/src/app/dist non
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
