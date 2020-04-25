@@ -47,6 +47,12 @@ ReactDOM.render(
           <InvalidBoardContainer type="404" />
         </Route>
       </Switch>
+      <Route path="*">
+        <a href="https://github.com/DHerls/nonograms" id="github-link" target="_blank">
+          <span className="github-logo"></span>
+          View on GitHub
+        </a>
+      </Route>
     </Router>
   </Provider>,
   document.getElementById("root")

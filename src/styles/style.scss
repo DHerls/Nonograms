@@ -422,3 +422,21 @@ nav {
     display: flex;
     justify-content: center;
 }
+
+.github-logo {
+    display: inline-block;
+    background-image: url('/GitHub-Mark-32px.png');
+    background-size: contain;
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 5px;
+}
+
+#github-link {
+    position: absolute;
+    display: flex;
+    bottom: 5px;
+    left: 5px;
+    align-items: center;
+    color: #000;
+}
