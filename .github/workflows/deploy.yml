@@ -28,5 +28,5 @@ jobs:
       run: |
         cd dist
         cp ../public/* .
-        aws s3 sync . s3://nonograms
-        aws cloudfront create-invalidation --distribution-id E15NJ64ORE7JYZ --paths "/index.html"
+        aws s3 sync . s3://non.danherlihy.me
+        aws cloudfront create-invalidation --distribution-id ET3UFIKIMR42E --paths "/index.html"
